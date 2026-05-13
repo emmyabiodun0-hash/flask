@@ -1,4 +1,4 @@
-import os
+import os   # env
 from datetime import datetime, timedelta
 
 
@@ -17,7 +17,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 
 from flask_mail import Mail, Message
-from dotenv import load_dotenv
+from dotenv import load_dotenv    # env
 
 
 from utils import generate_random_otp
@@ -25,7 +25,7 @@ OTP_LIFESPAN_MINUTES = 10
 
 
 
-load_dotenv()
+load_dotenv()    # env
 
 
 
@@ -39,9 +39,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'emmyabiodun0@gmail.com'
-app.config['MAIL_PASSWORD'] = 'iczseseunhzriprh'
-app.config['MAIL_DEFAULT_SENDER'] = 'emmyabiodun0@gmail.com'
+app.config['MAIL_USERNAME'] = os.getenv("DEFAULT_EMAIL")
+app.config['MAIL_PASSWORD'] = os.getenv("GMAIL_PASSWORD")
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv("DEFAULT_EMAIL")
 
 
 
