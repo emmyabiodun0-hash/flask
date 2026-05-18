@@ -8,6 +8,7 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 from flask_sqlalchemy import SQLAlchemy
 from form import Logins
 from forms import LoginForm
+import requests
 
 from post import PostForm
 from db import db
@@ -20,12 +21,17 @@ from flask_mail import Mail, Message
 from dotenv import load_dotenv    # env
 
 
-from utils import generate_random_otp
+
+from utils import generate_random_otp, send_registration_mail
 OTP_LIFESPAN_MINUTES = 10
 
 
 
 load_dotenv()    # env
+
+
+
+
 
 
 
@@ -159,9 +165,49 @@ def register():
         html_text = render_template("email/verify-email.html", username=user.username, otp=token.token)
 
         msg.html = html_text
-        mail.send(msg)
+        # mail.send(msg)
 
+        # payload = {  
+        #     "sender":{  
+        #         "name":"Flask App",
+        #         "email":"gemmy1866@gmail.com"
+        #     },
+        #     "to":[  
+        #     {  
+        #         "email":user.email,
+        #         "name":user.username
+        #     }
+        #     ],
+        #         "subject":f"Verifiy Account: Your OTP is {_new_otp}",
+        #         "htmlContent": html_text
+        #     }
+        # response = requests.post(
+        #     url=BREVO_URL,
+        #     headers={
+        #         'accept': "application/json",
+        #         'content-type':"application/json",
+        #         'api-key':os.getenv("BREVO_API_KEY")
+        #     },
+        #     data=json.dumps(payload)
+        # )
+        # print(response.json())
+
+
+    try:
+        brevo_response = send_registration_mail(
+            to=user.email,
+            username=user.username,
+            otp=_new_otp,
+            html_content=html_text
+        )
+        if brevo_response.status != 200:
+            raise Exception
+    except Exception as e:
+        flash("Account created but there was an error  sending the email", category="danger")
+        print("An error occured while sending", e)
+    else:
         session['user_being_verified'] = user.id
+        
         flash ("Sign up success. Please verify your email")
 
         return redirect(url_for('verify_otp'))
