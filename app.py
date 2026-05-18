@@ -193,24 +193,25 @@ def register():
         # print(response.json())
 
 
-    try:
-        brevo_response = send_registration_mail(
-            to=user.email,
-            username=user.username,
-            otp=_new_otp,
-            html_content=html_text
-        )
-        if brevo_response.status != 200:
-            raise Exception
-    except Exception as e:
-        flash("Account created but there was an error  sending the email", category="danger")
-        print("An error occured while sending", e)
-    else:
-        session['user_being_verified'] = user.id
-        
-        flash ("Sign up success. Please verify your email")
+        try:
+            brevo_response = send_registration_mail(
+                to=user.email,
+                username=user.username,
+                otp=_new_otp,
+                html_content=html_text
+            )
+            if brevo_response.status != 200:
+                raise Exception
+        except Exception as e:
+            flash("Account created but there was an error  sending the email", category="danger")
+            print("An error occured while sending", e)
+            return redirect(url_for('register'))
+        else:
+            session['user_being_verified'] = user.id
 
-        return redirect(url_for('verify_otp'))
+            flash ("Sign up success. Please verify your email")
+
+            return redirect(url_for('verify_otp'))
 
     return render_template("register.html", form=form)
 
