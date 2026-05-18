@@ -71,6 +71,15 @@ input[type="submit"]:hover{
 </head>
 
 <body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+
+      </div>
+    {% endfor %}
+  {% endwith %}
 
 <form action="" method="post">
 
