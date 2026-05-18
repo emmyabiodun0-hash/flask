@@ -200,7 +200,7 @@ def register():
                 otp=_new_otp,
                 html_content=html_text
             )
-            if brevo_response.status != 200:
+            if brevo_response.status_code != 201 or brevo_response.status_code !=200:
                 raise Exception
         except Exception as e:
             flash("Account created but there was an error  sending the email", category="danger")
