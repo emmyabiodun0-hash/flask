@@ -1,4 +1,5 @@
 import os   # env
+import traceback
 from datetime import datetime, timedelta
 
 
@@ -200,11 +201,17 @@ def register():
                 otp=_new_otp,
                 html_content=html_text
             )
-            if brevo_response.status_code != 201 or brevo_response.status_code !=200:
-                raise Exception
+            print(brevo_response)
+            print(brevo_response.status_code)
+            print(user.email)
+
+            # if brevo_response.status_code != 201 or brevo_response.status_code !=200:
+            #     print("Condition is true")
+            #     raise Exception
         except Exception as e:
             flash("Account created but there was an error  sending the email", category="danger")
-            print("An error occured while sending", e)
+            print("An error occured while sending")
+            traceback.print_exc()
             return redirect(url_for('register'))
         else:
             session['user_being_verified'] = user.id

@@ -21,7 +21,7 @@ def generate_random_otp(lenght: int):
 
 def send_registration_mail(
     to:str,
-    user:str,
+    username:str,
     otp:str,
     html_content:str
     ):
@@ -32,8 +32,8 @@ def send_registration_mail(
             },
             "to":[  
             {  
-                "email":user.email,
-                "name":user.username
+                "email":to,
+                "name":username
             }
             ],
                 "subject":f"Verifiy Account: Your OTP is {otp}",
