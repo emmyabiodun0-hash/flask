@@ -48,5 +48,7 @@ def send_registration_mail(
             },
             data=json.dumps(payload)
         )
+    print(response.json())
+    return response
     
 
